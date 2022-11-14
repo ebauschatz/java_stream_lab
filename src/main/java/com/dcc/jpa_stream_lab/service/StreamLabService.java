@@ -1,11 +1,7 @@
 package com.dcc.jpa_stream_lab.service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -223,11 +219,30 @@ public class StreamLabService {
     
     // DProblemOne
     // Delete the role relationship from the user who has the email "oda@gmail.com".
+    public User DProblemOne() {
+        User user = users.findAll().stream().filter(u -> u.getEmail().equals("oda@gmail.com")).findFirst().orElse(null);
+        Role userRole = user.getRoles().stream().findFirst().orElse(null);
+        user.removeRole(userRole);
+        return user;
+    }
 
     // DProblemTwo
     // Delete all the product relationships to the user with the email "oda@gmail.com" in the ShoppingCart table.
+    public User DProblemTwo() {
+        User user = users.findAll().stream().filter(u -> u.getEmail().equals("oda@gmail.com")).findFirst().orElse(null);
+        List<ShoppingcartItem> cartItems = user.getShoppingcartItems();
+        for (Iterator<ShoppingcartItem> iter = cartItems.listIterator(); iter.hasNext();) {
+            ShoppingcartItem cartItem = iter.next();
+            shoppingcartitems.delete(cartItem);
+        }
+        return user;
+    }
 
     // DProblemThree
     // Delete the user with the email "oda@gmail.com" from the Users table.
+    public void DProblemThree() {
+        User user = users.findAll().stream().filter(u -> u.getEmail().equals("oda@gmail.com")).findFirst().orElse(null);
+        users.delete(user);
+    }
 
 }
